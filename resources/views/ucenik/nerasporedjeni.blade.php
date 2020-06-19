@@ -72,9 +72,12 @@
                 stateSave: true,
                 ajax: {
                     url: '/ucenici/tabela',
-                    method: 'GET',
+                    method: 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: function (d) {
+                        d.nerasporedjeni = 1;
                     },
                 },
                 lengthMenu: [

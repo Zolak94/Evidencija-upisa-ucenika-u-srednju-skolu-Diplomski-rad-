@@ -33,8 +33,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Diplomski
                 </a>
@@ -81,8 +80,10 @@
                         @endguest
                     </ul>
                 </div>
-            </div>
         </nav>
+        {{-- <div class="container">
+            
+        </div> --}}
         <div class="container2" id="message">
 
             @if (\Session::has('success'))

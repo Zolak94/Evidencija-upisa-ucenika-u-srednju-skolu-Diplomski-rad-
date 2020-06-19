@@ -24,12 +24,15 @@ class UcenikController extends Controller
             ->select(
                 'ucenici.*', 'odeljenja.naziv'
             )
-            ->join('odeljenja', 'ucenici.odeljenje_id', 'odeljenja.id');
+            ->leftJoin('odeljenja', 'ucenici.odeljenje_id', 'odeljenja.id')
+            ->when($request->has('nerasporedjeni'), function ($query) {
+                return $query->whereNull('odeljenje_id');
+            });
         return datatables()->of($ucenici)
             ->addColumn('akcija', function ($data) {
                 $prikaz = '<a href="'.route('ucenici.show', ['id'=>$data->id]).'" class="btn btn-secondary" role="button">Prikaži</a>';
                 $izmena = '<a href="'.route('ucenici.edit', ['id'=>$data->id]).'" class="btn btn-secondary" role="button">Izmeni</a>';
-                $obrisi = '<a class="btn btn-link" onclick="obrisi()" data-url="'.route('prijave.destroy', ['id'=>$data->id]).'">Obriši</a>';
+                $obrisi = '<a class="btn btn-link" onclick="obrisi()" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
                 return $prikaz." ".$izmena.' '.$obrisi;
             })
             ->rawColumns(['akcija', 'radnik'])
