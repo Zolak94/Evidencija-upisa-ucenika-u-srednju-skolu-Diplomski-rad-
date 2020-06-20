@@ -20,9 +20,9 @@
     <!-- Title -->
     <title>@yield('naslov')</title>
 
-    {{-- <link rel="stylesheet" type="text/css" href="/select2-4.0.7/dist/css/select2.min.css" />
+    <link rel="stylesheet" type="text/css" href="/select2-4.0.7/dist/css/select2.min.css" />
     <script type="text/javascript" src="/select2-4.0.7/dist/js/select2.min.js"></script>
-    <script src="/select2-4.0.7//dist/js/i18n/sr.js"></script> --}}
+    <script src="/select2-4.0.7//dist/js/i18n/sr.js"></script>
     
     <link rel="stylesheet" href="/flatpickr/dist/flatpickr.min.css">
     <script src="/flatpickr/dist/flatpickr.min.js"></script>

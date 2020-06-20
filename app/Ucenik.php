@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Ucenik extends Model
 {
     public $table="ucenici";
-
     
     public function odeljenje()
 	{

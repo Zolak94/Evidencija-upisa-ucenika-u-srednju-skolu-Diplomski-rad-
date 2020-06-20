@@ -139,5 +139,8 @@ return [
         'datum_drugog_dela' => 'mesec završetka obračuna',
         'ime_prezime' => 'ime i prezime',
         'datum_rodjenja' => 'datum rođenja',
+        'broj_ucenika' => 'broj učenika',
+        'smer_id' => 'smer',
+        'staresina_id' => 'starešina',
     ],
 ];

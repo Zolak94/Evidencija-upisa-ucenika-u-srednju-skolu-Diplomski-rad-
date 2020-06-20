@@ -26,6 +26,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.moment = require('moment-timezone');
 moment.locale('sr')
 window.Swal = require('sweetalert2');
+require('@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.css');
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

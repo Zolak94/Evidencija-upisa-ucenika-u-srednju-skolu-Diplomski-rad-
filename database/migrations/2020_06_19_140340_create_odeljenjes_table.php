@@ -16,8 +16,13 @@ class CreateOdeljenjesTable extends Migration
         Schema::create('odeljenja', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('naziv');
+            $table->unsignedBigInteger('smer_id');
+            $table->unsignedBigInteger('staresina_id');
             $table->integer('broj_ucenika');
             $table->timestamps();
+            
+            $table->foreign('smer_id')->references('id')->on('smerovi');
+            $table->foreign('staresina_id')->references('id')->on('staresine');
         });
     }
 

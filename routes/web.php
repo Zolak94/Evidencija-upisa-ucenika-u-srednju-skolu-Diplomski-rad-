@@ -31,5 +31,11 @@ Route::get('/ucenici/{id}', 'UcenikController@show')->name('ucenici.show');
 Route::delete('/ucenici/{id}', 'UcenikController@destroy')->name('ucenici.destroy');
 
 
+Route::get('/odeljenja/unos', 'OdeljenjeController@create')->name('odeljenja.create');
+Route::post('/odeljenja', 'OdeljenjeController@store')->name('odeljenja.store');
 Route::get('/odeljenja', 'OdeljenjeController@index')->name('odeljenja.index');
 Route::post('/odeljenja/tabela', 'OdeljenjeController@tabela')->name('odeljenja.tabela');
+Route::get('/odeljenja/{id}/izmena', 'OdeljenjeController@edit')->name('odeljenja.edit');
+Route::patch('/odeljenja/{id}', 'OdeljenjeController@update')->name('odeljenja.update');
+Route::get('/odeljenja/{id}', 'OdeljenjeController@show')->name('odeljenja.show');
+Route::delete('/odeljenja/{id}', 'OdeljenjeController@destroy')->name('odeljenja.destroy');
