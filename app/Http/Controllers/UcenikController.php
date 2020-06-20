@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Ucenik;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Validator;
 
 class UcenikController extends Controller
 {
@@ -22,17 +23,22 @@ class UcenikController extends Controller
     {
         $ucenici = DB::table('ucenici')
             ->select(
-                'ucenici.*', 'odeljenja.naziv'
+                'ucenici.*', 'odeljenja.naziv',
+                DB::raw('IF(ucenici.pol = 1, "Muški", "Ženski") as pol')
             )
             ->leftJoin('odeljenja', 'ucenici.odeljenje_id', 'odeljenja.id')
             ->when($request->has('nerasporedjeni'), function ($query) {
                 return $query->whereNull('odeljenje_id');
             });
         return datatables()->of($ucenici)
+            ->filterColumn('pol', function($query, $keyword) {
+                $sql = 'IF(ucenici.pol = 1, "Muški", "Ženski") like ?';
+                $query->whereRaw($sql, ["%{$keyword}%"]);
+            })
             ->addColumn('akcija', function ($data) {
-                $prikaz = '<a href="'.route('ucenici.show', ['id'=>$data->id]).'" class="btn btn-secondary" role="button">Prikaži</a>';
-                $izmena = '<a href="'.route('ucenici.edit', ['id'=>$data->id]).'" class="btn btn-secondary" role="button">Izmeni</a>';
-                $obrisi = '<a class="btn btn-link" onclick="obrisi()" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
+                $prikaz = '<a href="'.route('ucenici.show', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Prikaži</a>';
+                $izmena = '<a href="'.route('ucenici.edit', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Izmeni</a>';
+                $obrisi = '<a class="btn btn-outline-secondary btn-sm" onclick="obrisi()" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
                 return $prikaz." ".$izmena.' '.$obrisi;
             })
             ->rawColumns(['akcija', 'radnik'])
@@ -46,7 +52,7 @@ class UcenikController extends Controller
      */
     public function create()
     {
-        //
+        return view('ucenik.unos');
     }
 
     /**
@@ -57,7 +63,42 @@ class UcenikController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(), [
+                'ime_prezime' => 'required',
+                'pol' => 'required',
+                'datum_rodjenja' => 'required',
+                'jmbg' => [
+                    'regex:[^(0[1-9]|[1-2][0-9]|31(?!(?:0[2469]|11))|30(?!02))(0[1-9]|1[0-2])([09][0-9]{2})([0-8][0-9]|9[0-6])([0-9]{3})(\d)$]',
+                    'unique:ucenici,jmbg'
+                ],
+                'broj_bodova' => 'required',
+            ]);
+            if ($validator->passes()) {
+                DB::beginTransaction();
+                $datum_rodjenja = \Carbon\Carbon::parse($request->get('datum_rodjenja'));
+                $ucenik = new Ucenik();
+                $ucenik->ime_prezime = $request->get('ime_prezime');
+                $ucenik->pol = $request->get('pol');
+                $ucenik->datum_rodjenja = $datum_rodjenja;
+                $ucenik->jmbg = $request->get('jmbg');
+                $ucenik->broj_bodova = $request->get('broj_bodova');
+                $ucenik->save();
+                DB::commit();
+                return redirect()->route('ucenici.show',$ucenik->id)
+                    ->with('success', 'Učenik '.$ucenik->ime_prezime.' je uspešno unet/a.');	
+            
+            } else {
+                return back()->withInput($request->input())->withErrors($validator->errors());
+            }
+        } catch (\Exception $e) { 
+            report($e);
+            DB::rollback();
+            return back()
+                ->withErrors($validator)
+                ->withInput($request->input())
+                ->with('fail', $e->getMessage());
+        }
     }
 
     /**
@@ -68,7 +109,9 @@ class UcenikController extends Controller
      */
     public function show($id)
     {
-        //
+        $ucenik = Ucenik::findOrFail($id);
+
+        return view('ucenik.prikaz', compact('ucenik', 'id'));
     }
 
     /**

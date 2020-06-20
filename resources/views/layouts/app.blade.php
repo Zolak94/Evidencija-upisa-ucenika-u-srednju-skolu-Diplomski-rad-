@@ -22,11 +22,12 @@
 
     {{-- <link rel="stylesheet" type="text/css" href="/select2-4.0.7/dist/css/select2.min.css" />
     <script type="text/javascript" src="/select2-4.0.7/dist/js/select2.min.js"></script>
-    <script src="/select2-4.0.7//dist/js/i18n/sr.js"></script>
+    <script src="/select2-4.0.7//dist/js/i18n/sr.js"></script> --}}
     
     <link rel="stylesheet" href="/flatpickr/dist/flatpickr.min.css">
     <script src="/flatpickr/dist/flatpickr.min.js"></script>
-    <script src="/flatpickr/dist/l10n/sr.js"></script> --}}
+    <script src="/flatpickr/dist/l10n/sr.js"></script>
+    
     @stack('scripts')
     @stack('styles')
 </head>
@@ -54,11 +55,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            @if (Route::has('register'))
+                            {{-- @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
-                            @endif
+                            @endif --}}
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

@@ -24,20 +24,23 @@
     <div class="flex-center position-ref">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="table-content">
-                    <div class="table-body">
+                <div class="card">
+                    <div class="card-header">
+                        Lista neraspoređenih učenika
+                    </div>
+                    <div class="card-body">
                           
                             <div class="row justify-content-between">
                                 <div class="col-md-4">
-                                    <a href="{{ route('ucenici.create') }}" id="excel_btn" class="btn btn-primary buttons-html5" tabindex="0" aria-controls="datatable" type="button">
+                                    <a href="{{ route('ucenici.create') }}" class="btn btn-outline-primary" tabindex="0">
                                         Unos
                                     </a>
                                 </div>
                                 <div style="margin-right: 15px">
-                                    <button id="excel_btn" class="btn btn-success buttons-html5" tabindex="0" aria-controls="datatable" type="button">
+                                    <button id="excel_btn" class="btn btn-outline-success buttons-html5" tabindex="0" aria-controls="datatable" type="button">
                                         <span>Excel</span>
                                     </button>
-                                    <button id="pdf_btn" class="btn btn-danger buttons-html5" tabindex="0" aria-controls="datatable" type="button">
+                                    <button id="pdf_btn" class="btn btn-outline-danger buttons-html5" tabindex="0" aria-controls="datatable" type="button">
                                         <span>PDF</span>
                                     </button>
                                 </div>

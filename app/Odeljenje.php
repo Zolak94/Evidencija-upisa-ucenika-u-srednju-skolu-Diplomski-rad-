@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Odeljenje extends Model
 {
-    //
+    public $table="odeljenja";
 }
