@@ -1,5 +1,9 @@
 @extends('layouts.app')
-@section('naslov', 'Lista neraspoređenih učenika')
+@if($nerasporedjeni == 1) 
+    @section('naslov', 'Lista neraspoređenih učenika') 
+@else 
+    @section('naslov', 'Lista učenika') 
+@endif
 @push('scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
@@ -217,6 +221,7 @@
                         title: "Da li ste sigurni?",
                         text: "Kada se jednom obriše učenik, neće više biti dostupan/na!",
                         icon: "warning",
+                        position: 'top',
                         showCancelButton: true,
                         cancelButtonText: 'Odustani',
                         confirmButtonText: 'Obriši'

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('naslov', 'Prijava za kamp')
+@section('naslov', 'Izmena učenika')
 @section('content')
 
 <div class="container">
@@ -9,7 +9,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Unos učenika
+                        Izmena učenika
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('ucenici.update', $id) }}" autocomplete="off">
@@ -77,7 +77,7 @@
 
                             <div class="form-group">
                                 <div class="offset-md-3">
-                                    <button type="submit" class="btn btn-primary" style="margin-left: 15px">Pošalji</button>
+                                    <button type="submit" class="btn btn-primary" style="margin-left: 15px">Izmeni</button>
                                     <a href="javascript:history.back()" class="btn btn-outline-secondary">Nazad</a>
                                 </div>
                             </div>
