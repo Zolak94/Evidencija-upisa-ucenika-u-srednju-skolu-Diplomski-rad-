@@ -210,6 +210,34 @@
                 $('#pdf_btn').on('click', function() {
                     table.button('#pdf_hidden_btn').trigger();
                 });
+                
+                $('.btn-obrisi').on('click', function() {
+                    console.log('test');
+                    var url = $(this).data('url');
+                    Swal.fire({
+                        title: "Da li ste sigurni?",
+                        text: "Kada se jednom obriše učenik, neće više biti dostupan/na!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        cancelButtonText: 'Odustani',
+                        confirmButtonText: 'Obriši'
+                    }).then((result) => {
+                        if (result.value) {
+                            $.ajax({
+                                type: 'POST',
+                                url: url,
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    "_method": "DELETE"
+                                },
+                                success: function (response) {
+                                    $("#message").load(location.href + " #message>*", "");
+                                    table.draw();
+                                }
+                            });
+                        }
+                    });
+                });
             });
             
         });

@@ -38,7 +38,7 @@ class UcenikController extends Controller
             ->addColumn('akcija', function ($data) {
                 $prikaz = '<a href="'.route('ucenici.show', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Prikaži</a>';
                 $izmena = '<a href="'.route('ucenici.edit', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Izmeni</a>';
-                $obrisi = '<a class="btn btn-outline-secondary btn-sm" onclick="obrisi()" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
+                $obrisi = '<a class="btn btn-outline-secondary btn-sm btn-obrisi" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
                 return $prikaz." ".$izmena.' '.$obrisi;
             })
             ->rawColumns(['akcija', 'radnik'])
@@ -182,6 +182,14 @@ class UcenikController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $ucenik = Ucenik::findOrFail($id);
+            $ucenik_podaci = $ucenik->ime_prezime;
+            $ucenik->delete();
+            return \Session::flash('success', 'Učenik '.$ucenik_podaci.' je uspešno obrisan/a!');
+        } catch (\Exception $e) { 
+            report($e);
+            return \Session::flash('fail', 'Operacija nije uspela! '. $e->getMessage());
+        }
     }
 }
