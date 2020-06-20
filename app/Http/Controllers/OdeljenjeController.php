@@ -16,12 +16,26 @@ class OdeljenjeController extends Controller
      */
     public function index()
     {
-        //
+        return view('odeljenje.lista');
     }
 
     public function tabela()
     {
-
+        $odeljenja = DB::table('odeljenja')
+            ->select(
+                'odeljenja.*', 'staresine.ime_prezime', 'smerovi.naziv as smer_naziv',
+            )
+            ->leftJoin('staresine', 'odeljenja.staresina_id', 'staresine.id')
+            ->leftJoin('smerovi', 'odeljenja.smer_id', 'smerovi.id');
+        return datatables()->of($odeljenja)
+            ->addColumn('akcija', function ($data) {
+                $prikaz = '<a href="'.route('odeljenja.show', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Prikaži</a>';
+                $izmena = '<a href="'.route('odeljenja.edit', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Izmeni</a>';
+                $obrisi = '<a class="btn btn-outline-secondary btn-sm btn-obrisi" data-url="'.route('odeljenja.destroy', ['id'=>$data->id]).'">Obriši</a>';
+                return $prikaz." ".$izmena.' '.$obrisi;
+            })
+            ->rawColumns(['akcija', 'radnik'])
+        ->make(true);
     }
 
     /**
