@@ -50,6 +50,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Diplomski
                 </a>
@@ -60,7 +61,18 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item @if( Route::currentRouteName() == 'ucenici.pocetna')
+                            active @endif">
+                            <a class="nav-link" href="{{ url('/') }}">Početna <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item @if( Route::currentRouteName() == 'ucenici.index')
+                            active @endif">
+                            <a class="nav-link" href="{{ url('/ucenici') }}">Učenici</a>
+                        </li>
+                        <li class="nav-item @if( Route::currentRouteName() == 'odeljenja.index')
+                            active @endif">
+                            <a class="nav-link" href="{{ url('/odeljenja') }}">Odeljenja</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -96,6 +108,7 @@
                         @endguest
                     </ul>
                 </div>
+            </div>
         </nav>
         {{-- <div class="container">
             

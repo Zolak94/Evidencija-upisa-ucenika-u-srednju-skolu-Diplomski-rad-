@@ -26,10 +26,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Lista neraspoređenih učenika
+                        Lista @if($nerasporedjeni == 1) neraspoređenih @endif učenika
                     </div>
                     <div class="card-body">
-                          
                             <div class="row justify-content-between">
                                 <div class="col-md-4">
                                     <a href="{{ route('ucenici.create') }}" class="btn btn-outline-primary" tabindex="0">
@@ -60,6 +59,7 @@
                                 </thead>
                             </table>
                         </div>
+                        <input style="display:none" id="nerasporedjeni" value="{{ $nerasporedjeni }}">
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     data: function (d) {
-                        d.nerasporedjeni = 1;
+                        d.nerasporedjeni = $('#nerasporedjeni').val();
                     },
                 },
                 lengthMenu: [
@@ -212,7 +212,6 @@
                 });
                 
                 $('.btn-obrisi').on('click', function() {
-                    console.log('test');
                     var url = $(this).data('url');
                     Swal.fire({
                         title: "Da li ste sigurni?",

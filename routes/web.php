@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('ucenici.pocetna');
 
 Auth::routes();
 
@@ -29,3 +29,7 @@ Route::get('/ucenici/{id}/izmena', 'UcenikController@edit')->name('ucenici.edit'
 Route::patch('/ucenici/{id}', 'UcenikController@update')->name('ucenici.update');
 Route::get('/ucenici/{id}', 'UcenikController@show')->name('ucenici.show');
 Route::delete('/ucenici/{id}', 'UcenikController@destroy')->name('ucenici.destroy');
+
+
+Route::get('/odeljenja', 'OdeljenjeController@index')->name('odeljenja.index');
+Route::post('/odeljenja/tabela', 'OdeljenjeController@tabela')->name('odeljenja.tabela');

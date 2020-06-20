@@ -16,7 +16,8 @@ class UcenikController extends Controller
      */
     public function index(Request $request)
     {
-        return view('ucenik.nerasporedjeni');
+        $nerasporedjeni = 0;
+        return view('ucenik.nerasporedjeni', compact('nerasporedjeni'));
     }
 
     public function tabela(Request $request)
@@ -27,7 +28,7 @@ class UcenikController extends Controller
                 DB::raw('IF(ucenici.pol = 1, "Muški", "Ženski") as pol')
             )
             ->leftJoin('odeljenja', 'ucenici.odeljenje_id', 'odeljenja.id')
-            ->when($request->has('nerasporedjeni'), function ($query) {
+            ->when($request->get('nerasporedjeni') == 1, function ($query) {
                 return $query->whereNull('odeljenje_id');
             });
         return datatables()->of($ucenici)

@@ -17,6 +17,11 @@ class OdeljenjeController extends Controller
         //
     }
 
+    public function tabel()
+    {
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *

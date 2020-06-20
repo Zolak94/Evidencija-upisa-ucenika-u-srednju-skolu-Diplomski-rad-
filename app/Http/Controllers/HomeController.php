@@ -13,6 +13,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('ucenik.nerasporedjeni');
+        $nerasporedjeni = 1;
+        return view('ucenik.nerasporedjeni', compact('nerasporedjeni'));
     }
 }
