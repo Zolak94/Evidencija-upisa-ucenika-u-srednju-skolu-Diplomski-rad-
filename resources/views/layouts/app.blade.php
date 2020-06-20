@@ -27,7 +27,22 @@
     <link rel="stylesheet" href="/flatpickr/dist/flatpickr.min.css">
     <script src="/flatpickr/dist/flatpickr.min.js"></script>
     <script src="/flatpickr/dist/l10n/sr.js"></script>
-    
+
+    <style>
+        .container2 {
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            text-align: center;
+            max-width: 35% !important;
+            width: 30%;
+            padding-right: 15px;
+            padding-left: 15px;
+            z-index: 9999999;
+        }
+    </style>
     @stack('scripts')
     @stack('styles')
 </head>

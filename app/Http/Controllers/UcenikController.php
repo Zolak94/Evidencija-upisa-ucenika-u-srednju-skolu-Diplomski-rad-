@@ -85,7 +85,7 @@ class UcenikController extends Controller
                 $ucenik->broj_bodova = $request->get('broj_bodova');
                 $ucenik->save();
                 DB::commit();
-                return redirect()->route('ucenici.show',$ucenik->id)
+                return redirect()->route('ucenici.show', $ucenik->id)
                     ->with('success', 'Učenik '.$ucenik->ime_prezime.' je uspešno unet/a.');	
             
             } else {
@@ -122,7 +122,9 @@ class UcenikController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ucenik = Ucenik::findOrFail($id);
+
+        return view('ucenik.izmena', compact('ucenik', 'id'));
     }
 
     /**
@@ -134,7 +136,42 @@ class UcenikController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(), [
+                'ime_prezime' => 'required',
+                'pol' => 'required',
+                'datum_rodjenja' => 'required',
+                'jmbg' => [
+                    'regex:[^(0[1-9]|[1-2][0-9]|31(?!(?:0[2469]|11))|30(?!02))(0[1-9]|1[0-2])([09][0-9]{2})([0-8][0-9]|9[0-6])([0-9]{3})(\d)$]',
+                    'unique:ucenici,jmbg,'.$id
+                ],
+                'broj_bodova' => 'required',
+            ]);
+            if ($validator->passes()) {
+                DB::beginTransaction();
+                $datum_rodjenja = \Carbon\Carbon::parse($request->get('datum_rodjenja'));
+                $ucenik = Ucenik::findOrFail($id);
+                $ucenik->ime_prezime = $request->get('ime_prezime');
+                $ucenik->pol = $request->get('pol');
+                $ucenik->datum_rodjenja = $datum_rodjenja;
+                $ucenik->jmbg = $request->get('jmbg');
+                $ucenik->broj_bodova = $request->get('broj_bodova');
+                $ucenik->save();
+                DB::commit();
+                return redirect()->route('ucenici.show', $ucenik->id)
+                    ->with('success', 'Učenik '.$ucenik->ime_prezime.' je uspešno izmenjen/a.');	
+            
+            } else {
+                return back()->withInput($request->input())->withErrors($validator->errors());
+            }
+        } catch (\Exception $e) { 
+            report($e);
+            DB::rollback();
+            return back()
+                ->withErrors($validator)
+                ->withInput($request->input())
+                ->with('fail', $e->getMessage());
+        }
     }
 
     /**

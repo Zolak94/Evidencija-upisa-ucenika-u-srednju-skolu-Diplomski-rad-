@@ -110,7 +110,6 @@
                         extend: 'pdfHtml5',
                         download: 'open',
                         text: 'PDF',
-                        orientation: 'landscape',
                         attr:  {
                             id: 'pdf_hidden_btn'
                         },
