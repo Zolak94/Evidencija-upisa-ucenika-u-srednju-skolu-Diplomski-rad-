@@ -30,7 +30,7 @@
                                 <div class="offset-md-3 col-md-6">
                                     <label>Datum rođenja*</label>
                                     <input class="flatpickr form-control input active" type="text" id="datum_rodjenja"
-                                        name="datum_rodjenja" value="{{ old('datum_rodjenja', $ucenik->datum_rodjenja)}}"
+                                        name="datum_rodjenja" value="{{ old('datum_rodjenja', \Carbon\Carbon::parse($ucenik->datum_rodjenja)->format('d.m.Y.'))}}"
                                         onKeyDown="$('#datum_rodjenja_error').hide()">
                                     @error('datum_rodjenja')
                                         <span class="help-block" style="color:red;" id="datum_rodjenja_error">{{ $message }}</span>

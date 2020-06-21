@@ -82,13 +82,18 @@ class OdeljenjeController extends Controller
                 $odeljenje->save();
 
                 $nerasporedjeni_ucenici = Ucenik::whereNull('odeljenje_id')
-                    ->get();
+                    ->get()
+                    ->sortByDesc('broj_bodova')
+                    ->take($odeljenje->broj_ucenika);
                 if ($nerasporedjeni_ucenici->isEmpty()) {
                     throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je 0.", 1);
                 } else if ($nerasporedjeni_ucenici->count() < $odeljenje->broj_ucenika) {
                     throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je manji od ".$odeljenje->broj_ucenika.'.', 1);
                 }
-
+                foreach ($nerasporedjeni_ucenici as $key => $nerasporedjen_ucenik) {
+                    $nerasporedjen_ucenik->odeljenje_id = $odeljenje->id;
+                    $nerasporedjen_ucenik->save();
+                }
                 DB::commit();
                 return redirect()->route('odeljenja.show', $odeljenje->id)
                     ->with('success', 'Odeljenje '.$odeljenje->naziv.' je uspešno uneto.');	

@@ -18,7 +18,7 @@ class CreateUceniksTable extends Migration
             $table->string('ime_prezime');
             $table->date('datum_rodjenja');
             $table->decimal('broj_bodova', 11, 2);
-            $table->bigInteger('jmbg');
+            $table->string('jmbg');
             $table->integer('pol');
             $table->unsignedBigInteger('odeljenje_id')->nullable();
             $table->timestamps();
