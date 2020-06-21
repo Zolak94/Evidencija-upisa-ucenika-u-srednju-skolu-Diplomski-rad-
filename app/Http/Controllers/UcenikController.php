@@ -54,7 +54,8 @@ class UcenikController extends Controller
      */
     public function create()
     {
-        return view('ucenik.unos');
+        $smerovi = \App\Smer::all();
+        return view('ucenik.unos', compact('smerovi'));
     }
 
     /**
@@ -75,6 +76,7 @@ class UcenikController extends Controller
                     'unique:ucenici,jmbg'
                 ],
                 'broj_bodova' => 'required',
+                'smer_id' => 'required',
             ]);
             if ($validator->passes()) {
                 DB::beginTransaction();
@@ -85,6 +87,7 @@ class UcenikController extends Controller
                 $ucenik->datum_rodjenja = $datum_rodjenja;
                 $ucenik->jmbg = $request->get('jmbg');
                 $ucenik->broj_bodova = $request->get('broj_bodova');
+                $ucenik->smer_id = $request->get('smer_id');
                 $ucenik->save();
                 DB::commit();
                 return redirect()->route('ucenici.show', $ucenik->id)
@@ -125,8 +128,8 @@ class UcenikController extends Controller
     public function edit($id)
     {
         $ucenik = Ucenik::findOrFail($id);
-
-        return view('ucenik.izmena', compact('ucenik', 'id'));
+        $smerovi = \App\Smer::all();
+        return view('ucenik.izmena', compact('ucenik', 'id', 'smerovi'));
     }
 
     /**
@@ -148,6 +151,7 @@ class UcenikController extends Controller
                     'unique:ucenici,jmbg,'.$id
                 ],
                 'broj_bodova' => 'required',
+                'smer_id' => 'required',
             ]);
             if ($validator->passes()) {
                 DB::beginTransaction();
@@ -158,6 +162,7 @@ class UcenikController extends Controller
                 $ucenik->datum_rodjenja = $datum_rodjenja;
                 $ucenik->jmbg = $request->get('jmbg');
                 $ucenik->broj_bodova = $request->get('broj_bodova');
+                $ucenik->smer_id = $request->get('smer_id');
                 $ucenik->save();
                 DB::commit();
                 return redirect()->route('ucenici.show', $ucenik->id)

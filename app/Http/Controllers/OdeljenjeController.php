@@ -82,6 +82,7 @@ class OdeljenjeController extends Controller
                 $odeljenje->save();
 
                 $nerasporedjeni_ucenici = Ucenik::whereNull('odeljenje_id')
+                    ->where('smer_id', $odeljenje->smer_id)
                     ->get()
                     ->sortByDesc('broj_bodova')
                     ->take($odeljenje->broj_ucenika);
