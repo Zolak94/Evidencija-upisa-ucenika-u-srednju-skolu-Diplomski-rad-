@@ -59,6 +59,10 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    
+                    @guest
+
+                    @else
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item @if( Route::currentRouteName() == 'ucenici.pocetna')
@@ -80,7 +84,7 @@
                             <a class="nav-link" href="{{ url('/odeljenja') }}">Odeljenja</a>
                         </li>
                     </ul>
-
+                    @endguest
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->

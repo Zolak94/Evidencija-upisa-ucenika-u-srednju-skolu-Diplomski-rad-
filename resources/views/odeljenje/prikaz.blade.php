@@ -6,7 +6,14 @@
 @endpush
 @push('styles')
 <style>
-
+    .select2-container {
+        box-sizing: border-box;
+        display: inline-block;
+        margin: 0;
+        position: relative;
+        vertical-align: middle;
+        width: 100% !important;
+    }
 </style>
 @endpush
 
@@ -38,7 +45,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2"><span class="spanInput">Broj učenika</span></td>
-                                        <td colspan="2">{{ $odeljenje->broj_ucenika }}</td>
+                                        <td colspan="2">{{ $odeljenje->ucenici->count() }} / {{ $odeljenje->broj_ucenika }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -46,9 +53,9 @@
                         </div>
                         <div class="row justify-content-between">
                             <div class="col-md-4">
-                                <a href="#" class="btn btn-outline-primary" tabindex="0">
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#ucenikModal">
                                     Unos učenika
-                                </a>
+                                </button>
                             </div>
                             <div style="margin-right: 15px">
                                 <button id="excel_btn" class="btn btn-outline-success buttons-html5" tabindex="0" aria-controls="datatable" type="button">
@@ -73,6 +80,39 @@
                             </thead>
                         </table>
                     </div>
+                    <div class="modal fade" id="ucenikModal" tabindex="-1" role="dialog" aria-labelledby="ucenikModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="ucenikModalLabel">Unos učenika</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form enctype="multipart/form-data" id="modal_form_id" method="POST" autocomplete="off">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Učenik:</label>
+                                            <select class="combobox" data-placeholder="Izaberite učenika"
+                                                name="ucenik_id" id="ucenik_id">
+                                                <option hidden></option>
+                                                @foreach($ucenici as $ucenik)
+                                                    <option value="{{ $ucenik->id }}" class='ucenik'>{{$ucenik->ime_prezime}}(Bodovi: {{ $ucenik->broj_bodova }})</option>
+                                                @endforeach
+                                            </select>
+                                            <span style="display:none; color:red" id="error_ucenik_id"
+                                                    class="help-block"></span>
+                                          </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                                    <button type="button" id="submitUcenika" data-token="{{ csrf_token() }}" class="btn btn-primary">Unesi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-footer text-muted">
                         <div class="row footer-tabs">
                             <div class="col-md-12 text-md-center">
@@ -92,6 +132,10 @@
     <script>
         var table;
         $(document).ready(function() {
+            $('.combobox').select2({
+                theme: 'bootstrap4',
+                language: 'sr',
+            });
             table = $('#datatable').DataTable({
                 serverSide: true,
                 stateSave: true,
@@ -246,7 +290,42 @@
                     });
                 });
             });
-            
+            $('#ucenik_id').on('change', function() {
+                $('#error_ucenik_id').hide();
+            })
+            $('#submitUcenika').click(function(e) {
+                e.preventDefault();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/odeljenje/ucenici/unos',
+                    method: 'POST',
+                    data: {
+                        _token: $(this).data('token'),
+                        id: @json($id),
+                        ucenik_id: $('#ucenik_id').val(),
+                    },
+                    success: function(data) {
+                        if (data.errors) {
+                            if (data.errors.ucenik_id) {
+                                $('#error_ucenik_id').show();
+                                $('#error_ucenik_id').html(data.errors.ucenik_id[0]);
+                            }
+                        } else {
+                            $('#open').hide();
+                            $('#ucenikModal').modal('hide');
+                            $('#ucenik_id').find('[value="' + $('#ucenik_id').val() + '"]').remove();
+                            $('#ucenik_id').val("").trigger('change');
+                            $('#error_ucenik_id').hide();
+                            $("#message").load(location.href + " #message>*", "");
+                            table.ajax.reload();
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endsection

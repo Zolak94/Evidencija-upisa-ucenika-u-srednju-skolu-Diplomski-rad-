@@ -42,3 +42,4 @@ Route::delete('/odeljenja/{id}', 'OdeljenjeController@destroy')->name('odeljenja
 
 Route::post('/odeljenja/ucenici/tabela', 'OdeljenjeController@tabela_ucenika')->name('odeljenja.tabela_ucenika');
 Route::patch('/odeljenja/ucenici/{id}', 'OdeljenjeController@uklanjanje_ucenika')->name('odeljenja.uklanjanje_ucenika');
+Route::post('/odeljenje/ucenici/unos', 'OdeljenjeController@unos_ucenika')->name('odeljenja.unos_ucenika');

@@ -121,8 +121,9 @@ class OdeljenjeController extends Controller
     public function show($id)
     {
         $odeljenje = Odeljenje::findOrFail($id);
-        $ucenici = Ucenik::where('odeljenje_id', $odeljenje->id)
-            ->get();
+        $ucenici = Ucenik::whereNull('odeljenje_id')
+            ->get()
+            ->sortByDesc('broj_bodova');
         return view('odeljenje.prikaz', compact('odeljenje', 'id', 'ucenici'));
     }
 
@@ -241,6 +242,26 @@ class OdeljenjeController extends Controller
         } catch (\Exception $e) { 
             report($e);
             return \Session::flash('fail', 'Operacija nije uspela! '. $e->getMessage());
+        }
+    }
+
+    public function unos_ucenika(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'ucenik_id' => 'required',
+        ]);
+        if ($validator->passes()) {
+            $odeljenje = Odeljenje::find($request->get('id'));
+            if ($odeljenje->ucenici->count() < $odeljenje->broj_ucenika) {
+                $ucenik = Ucenik::find($request->get('ucenik_id'));
+                $ucenik->odeljenje_id = $request->get('id');
+                $ucenik->save();
+                return \Session::flash('success', 'Učenik je uspšeno unesen.');
+            } else {
+                return \Session::flash('fail', 'Odeljenje ima maksimalan broj učenika.');
+            }
+        } else {
+            return response()->json(['errors' => $validator->errors()]);
         }
     }
 }

@@ -23,4 +23,9 @@ class Odeljenje extends Model
                 'ime_prezime' => $this->ime_prezime,
             ]);
     }
+
+    public function ucenici()
+	{
+		return $this->hasMany(Ucenik::class);
+    }
 }

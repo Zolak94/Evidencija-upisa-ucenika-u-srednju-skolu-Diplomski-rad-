@@ -142,5 +142,6 @@ return [
         'broj_ucenika' => 'broj učenika',
         'smer_id' => 'smer',
         'staresina_id' => 'starešina',
+        'ucenik_id' => 'učenik'
     ],
 ];
