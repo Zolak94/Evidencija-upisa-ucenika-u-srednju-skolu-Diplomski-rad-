@@ -44,6 +44,22 @@
                             </table>
 
                         </div>
+                        <div class="row justify-content-between">
+                            <div class="col-md-4">
+                                <a href="#" class="btn btn-outline-primary" tabindex="0">
+                                    Unos učenika
+                                </a>
+                            </div>
+                            <div style="margin-right: 15px">
+                                <button id="excel_btn" class="btn btn-outline-success buttons-html5" tabindex="0" aria-controls="datatable" type="button">
+                                    <span>Excel</span>
+                                </button>
+                                <button id="pdf_btn" class="btn btn-outline-danger buttons-html5" tabindex="0" aria-controls="datatable" type="button">
+                                    <span>PDF</span>
+                                </button>
+                            </div>
+                        </div>
+                        <br>
                         <table id="datatable" class="table teable-stripe table-hover" style="width: 100%">
                             <thead>
                                 <tr>
@@ -207,12 +223,11 @@
                     var url = $(this).data('url');
                     Swal.fire({
                         title: "Da li ste sigurni?",
-                        text: "Kada se jednom obriše učenik, neće više biti dostupan/na!",
                         icon: "warning",
                         position: 'top',
                         showCancelButton: true,
                         cancelButtonText: 'Odustani',
-                        confirmButtonText: 'Obriši'
+                        confirmButtonText: 'Ukloni'
                     }).then((result) => {
                         if (result.value) {
                             $.ajax({
@@ -220,7 +235,7 @@
                                 url: url,
                                 data: {
                                     "_token": "{{ csrf_token() }}",
-                                    "_method": "DELETE"
+                                    "_method": "PATCH"
                                 },
                                 success: function (response) {
                                     $("#message").load(location.href + " #message>*", "");

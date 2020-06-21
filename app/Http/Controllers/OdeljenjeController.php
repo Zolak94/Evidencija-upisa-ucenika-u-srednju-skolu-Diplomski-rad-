@@ -142,7 +142,7 @@ class OdeljenjeController extends Controller
             })
             ->addColumn('akcija', function ($data) {
                 $prikaz = '<a href="'.route('ucenici.show', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Prikaži</a>';
-                $obrisi = '<a class="btn btn-outline-secondary btn-sm btn-obrisi" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
+                $obrisi = '<a class="btn btn-outline-secondary btn-sm btn-obrisi" data-url="'.route('odeljenja.uklanjanje_ucenika', ['id'=>$data->id]).'">Ukloni</a>';
                 return $prikaz." ".$obrisi;
             })
             ->rawColumns(['akcija', 'radnik'])
@@ -225,6 +225,19 @@ class OdeljenjeController extends Controller
             $odeljenje_podaci = $odeljenje->naziv;
             $odeljenje->delete();
             return \Session::flash('success', 'Odeljenje '.$odeljenje_podaci.' je uspešno obrisano!');
+        } catch (\Exception $e) { 
+            report($e);
+            return \Session::flash('fail', 'Operacija nije uspela! '. $e->getMessage());
+        }
+    }
+    
+    public function uklanjanje_ucenika($id)
+    {
+        try {
+            $ucenik = Ucenik::findOrFail($id);
+            $ucenik->odeljenje_id = null;
+            $ucenik->save();
+            return \Session::flash('success', 'Učenik '.$ucenik->ime_prezime.' je uspešno uklonjen iz odeljenja!');
         } catch (\Exception $e) { 
             report($e);
             return \Session::flash('fail', 'Operacija nije uspela! '. $e->getMessage());
