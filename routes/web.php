@@ -39,3 +39,4 @@ Route::get('/odeljenja/{id}/izmena', 'OdeljenjeController@edit')->name('odeljenj
 Route::patch('/odeljenja/{id}', 'OdeljenjeController@update')->name('odeljenja.update');
 Route::get('/odeljenja/{id}', 'OdeljenjeController@show')->name('odeljenja.show');
 Route::delete('/odeljenja/{id}', 'OdeljenjeController@destroy')->name('odeljenja.destroy');
+Route::post('/odeljenja/ucenici/tabela', 'OdeljenjeController@tabela_ucenika')->name('odeljenja.tabela_ucenika');

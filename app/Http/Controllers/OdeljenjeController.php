@@ -121,8 +121,32 @@ class OdeljenjeController extends Controller
     public function show($id)
     {
         $odeljenje = Odeljenje::findOrFail($id);
+        $ucenici = Ucenik::where('odeljenje_id', $odeljenje->id)
+            ->get();
+        return view('odeljenje.prikaz', compact('odeljenje', 'id', 'ucenici'));
+    }
 
-        return view('odeljenje.prikaz', compact('odeljenje', 'id'));
+    public function tabela_ucenika(Request $request)
+    {
+        $ucenici = DB::table('ucenici')
+            ->select(
+                'ucenici.*', 'odeljenja.naziv',
+                DB::raw('IF(ucenici.pol = 1, "Muški", "Ženski") as pol')
+            )
+            ->leftJoin('odeljenja', 'ucenici.odeljenje_id', 'odeljenja.id')
+            ->where('odeljenje_id', $request->get('id'));
+        return datatables()->of($ucenici)
+            ->filterColumn('pol', function($query, $keyword) {
+                $sql = 'IF(ucenici.pol = 1, "Muški", "Ženski") like ?';
+                $query->whereRaw($sql, ["%{$keyword}%"]);
+            })
+            ->addColumn('akcija', function ($data) {
+                $prikaz = '<a href="'.route('ucenici.show', ['id'=>$data->id]).'" class="btn btn-outline-primary btn-sm" role="button">Prikaži</a>';
+                $obrisi = '<a class="btn btn-outline-secondary btn-sm btn-obrisi" data-url="'.route('ucenici.destroy', ['id'=>$data->id]).'">Obriši</a>';
+                return $prikaz." ".$obrisi;
+            })
+            ->rawColumns(['akcija', 'radnik'])
+        ->make(true);
     }
 
     /**
