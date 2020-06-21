@@ -46,7 +46,10 @@ class OdeljenjeController extends Controller
      */
     public function create()
     {
-        $smerovi = \App\Smer::all();
+        $smerovi = \App\Smer::select('smerovi.*')
+            ->leftJoin('odeljenja', 'smerovi.id', 'odeljenja.smer_id')
+            ->whereNull('odeljenja.smer_id')
+            ->get();
         $staresine = \App\Staresina::select('staresine.*')
             ->leftJoin('odeljenja', 'staresine.id', 'odeljenja.staresina_id')
             ->whereNull('odeljenja.staresina_id')
@@ -125,7 +128,11 @@ class OdeljenjeController extends Controller
     public function edit($id)
     {
         $odeljenje = Odeljenje::findOrFail($id);
-        $smerovi = \App\Smer::all();
+        $smerovi = \App\Smer::select('smerovi.*')
+            ->leftJoin('odeljenja', 'smerovi.id', 'odeljenja.smer_id')
+            ->whereNull('odeljenja.smer_id')
+            ->orWhere('odeljenja.smer_id', $odeljenje->smer_id)
+            ->get();    
         $staresine = \App\Staresina::select('staresine.*')
             ->leftJoin('odeljenja', 'staresine.id', 'odeljenja.staresina_id')
             ->whereNull('odeljenja.staresina_id')
