@@ -6,6 +6,7 @@ use App\Odeljenje;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\Ucenik;
 
 class OdeljenjeController extends Controller
 {
@@ -76,6 +77,15 @@ class OdeljenjeController extends Controller
                 $odeljenje->smer_id = $request->get('smer_id');
                 $odeljenje->staresina_id = $request->get('staresina_id');
                 $odeljenje->save();
+
+                $nerasporedjeni_ucenici = Ucenik::whereNull('odeljenje_id')
+                    ->get();
+                if ($nerasporedjeni_ucenici->isEmpty()) {
+                    throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je 0.", 1);
+                } else if ($nerasporedjeni_ucenici->count() < $odeljenje->broj_ucenika) {
+                    throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je manji od ".$odeljenje->broj_ucenika.'.', 1);
+                }
+
                 DB::commit();
                 return redirect()->route('odeljenja.show', $odeljenje->id)
                     ->with('success', 'Odeljenje '.$odeljenje->naziv.' je uspešno uneto.');	
