@@ -65,11 +65,17 @@
                             active @endif">
                             <a class="nav-link" href="{{ url('/') }}">Početna <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item @if( Route::currentRouteName() == 'ucenici.index')
+                        <li class="nav-item @if( Route::currentRouteName() == 'ucenici.index'
+                            || Route::currentRouteName() == 'ucenici.create'
+                            || Route::currentRouteName() == 'ucenici.edit'
+                            || Route::currentRouteName() == 'ucenici.show')
                             active @endif">
                             <a class="nav-link" href="{{ url('/ucenici') }}">Učenici</a>
                         </li>
-                        <li class="nav-item @if( Route::currentRouteName() == 'odeljenja.index')
+                        <li class="nav-item @if( Route::currentRouteName() == 'odeljenja.index'
+                        || Route::currentRouteName() == 'odeljenja.create'
+                        || Route::currentRouteName() == 'odeljenja.edit'
+                        || Route::currentRouteName() == 'odeljenja.show')
                             active @endif">
                             <a class="nav-link" href="{{ url('/odeljenja') }}">Odeljenja</a>
                         </li>

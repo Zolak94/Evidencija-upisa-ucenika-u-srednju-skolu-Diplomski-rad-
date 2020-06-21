@@ -99,9 +99,11 @@ class OdeljenjeController extends Controller
      * @param  \App\Odeljenje  $odeljenje
      * @return \Illuminate\Http\Response
      */
-    public function show(Odeljenje $odeljenje)
+    public function show($id)
     {
-        //
+        $odeljenje = Odeljenje::findOrFail($id);
+
+        return view('odeljenje.prikaz', compact('odeljenje', 'id'));
     }
 
     /**
@@ -110,9 +112,16 @@ class OdeljenjeController extends Controller
      * @param  \App\Odeljenje  $odeljenje
      * @return \Illuminate\Http\Response
      */
-    public function edit(Odeljenje $odeljenje)
+    public function edit($id)
     {
-        //
+        $odeljenje = Odeljenje::findOrFail($id);
+        $smerovi = \App\Smer::all();
+        $staresine = \App\Staresina::select('staresine.*')
+            ->leftJoin('odeljenja', 'staresine.id', 'odeljenja.staresina_id')
+            ->whereNull('odeljenja.staresina_id')
+            ->orWhere('odeljenja.staresina_id', $odeljenje->staresina_id)
+            ->get();
+        return view('odeljenje.izmena', compact('odeljenje', 'id', 'smerovi', 'staresine'));
     }
 
     /**
@@ -122,9 +131,38 @@ class OdeljenjeController extends Controller
      * @param  \App\Odeljenje  $odeljenje
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Odeljenje $odeljenje)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(), [
+                'naziv' => 'required',
+                'broj_ucenika' => 'required',
+                'smer_id' => 'required',
+                'staresina_id' => 'required'
+            ]);
+            if ($validator->passes()) {
+                DB::beginTransaction();
+                $odeljenje = Odeljenje::findOrFail($id);
+                $odeljenje->naziv = $request->get('naziv');
+                $odeljenje->broj_ucenika = $request->get('broj_ucenika');
+                $odeljenje->smer_id = $request->get('smer_id');
+                $odeljenje->staresina_id = $request->get('staresina_id');
+                $odeljenje->save();
+                DB::commit();
+                return redirect()->route('odeljenja.show', $odeljenje->id)
+                    ->with('success', 'Odeljenje '.$odeljenje->naziv.' je uspešno izmenjeno.');	
+            
+            } else {
+                return back()->withInput($request->input())->withErrors($validator->errors());
+            }
+        } catch (\Exception $e) { 
+            report($e);
+            DB::rollback();
+            return back()
+                ->withErrors($validator)
+                ->withInput($request->input())
+                ->with('fail', $e->getMessage());
+        }
     }
 
     /**
@@ -133,8 +171,16 @@ class OdeljenjeController extends Controller
      * @param  \App\Odeljenje  $odeljenje
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Odeljenje $odeljenje)
+    public function destroy($id)
     {
-        //
+        try {
+            $odeljenje = Odeljenje::findOrFail($id);
+            $odeljenje_podaci = $odeljenje->naziv;
+            $odeljenje->delete();
+            return \Session::flash('success', 'Odeljenje '.$odeljenje_podaci.' je uspešno obrisano!');
+        } catch (\Exception $e) { 
+            report($e);
+            return \Session::flash('fail', 'Operacija nije uspela! '. $e->getMessage());
+        }
     }
 }
