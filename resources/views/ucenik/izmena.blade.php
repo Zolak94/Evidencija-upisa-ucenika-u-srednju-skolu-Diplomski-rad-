@@ -76,6 +76,22 @@
                             </div>
 
                             <div class="form-group">
+                                <div class="offset-md-3 col-md-6">
+                                    <label>Željeni smer*</label>
+                                    <select name="smer_id" id="smer_id" class="combobox form-control"
+                                        data-placeholder="Izaberite smer">
+                                        <option disabled hidden selected></option>
+                                        @foreach ($smerovi as $smer)
+                                            <option value="{{$smer->id}}" @if(old('smer_id', $ucenik->smer_id) == $smer->id) selected="selected" @endif>{{$smer->naziv}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('smer_id')
+                                        <span class="help-block" style="color:red;" id="smer_id_error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <div class="offset-md-3">
                                     <button type="submit" class="btn btn-primary" style="margin-left: 15px">Izmeni</button>
                                     <a href="javascript:history.back()" class="btn btn-outline-secondary">Nazad</a>

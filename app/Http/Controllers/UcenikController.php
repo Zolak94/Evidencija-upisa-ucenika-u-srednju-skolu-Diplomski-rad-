@@ -17,17 +17,18 @@ class UcenikController extends Controller
     public function index(Request $request)
     {
         $nerasporedjeni = 0;
-        return view('ucenik.nerasporedjeni', compact('nerasporedjeni'));
+        return view('ucenik.lista', compact('nerasporedjeni'));
     }
 
     public function tabela(Request $request)
     {
         $ucenici = DB::table('ucenici')
             ->select(
-                'ucenici.*', 'odeljenja.naziv',
+                'ucenici.*', 'odeljenja.naziv', 'smerovi.naziv as smer_naziv',
                 DB::raw('IF(ucenici.pol = 1, "Muški", "Ženski") as pol')
             )
             ->leftJoin('odeljenja', 'ucenici.odeljenje_id', 'odeljenja.id')
+            ->leftJoin('smerovi', 'ucenici.smer_id', 'smerovi.id')
             ->when($request->get('nerasporedjeni') == 1, function ($query) {
                 return $query->whereNull('odeljenje_id');
             });

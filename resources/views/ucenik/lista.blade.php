@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('naslov', 'Lista neraspoređenih učenika')
+@section('naslov', 'Lista učenika') 
 @push('scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
@@ -26,7 +26,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Lista neraspoređenih učenika
+                        Lista učenika
                     </div>
                     <div class="card-body">
                             <div class="row justify-content-between">
@@ -53,7 +53,7 @@
                                         <th>Datum rođenja</th>
                                         <th>Pol</th>
                                         <th>Broj bodova</th>
-                                        <th>Željeni smer</th>
+                                        <th>Odeljenje</th>
                                         <th nowrap>Akcija</th>
                                     </tr>
                                 </thead>
@@ -182,8 +182,8 @@
                         name: 'broj_bodova'
                     },
                     {
-                        data: 'smer_naziv',
-                        name: 'smerovi.naziv',
+                        data: 'naziv',
+                        name: 'odeljenja.naziv',
                     },
                     {
                         data: 'akcija',

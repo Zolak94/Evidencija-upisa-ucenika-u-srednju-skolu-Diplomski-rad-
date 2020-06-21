@@ -52,10 +52,17 @@
                                         <td colspan="2"><span class="spanInput">Broj bodova</span></td>
                                         <td colspan="2">{{ $ucenik->broj_bodova }}</td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="2"><span class="spanInput">Odeljenje</span></td>
-                                        <td colspan="2">{{ $ucenik->odeljenje->naziv }}</td>
-                                    </tr>
+                                    @if ($ucenik->odeljenje_id == null)
+                                        <tr>
+                                            <td colspan="2"><span class="spanInput">Željeni smer</span></td>
+                                            <td colspan="2">{{ $ucenik->smer->naziv }}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td colspan="2"><span class="spanInput">Odeljenje</span></td>
+                                            <td colspan="2">{{ $ucenik->odeljenje->naziv }}</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
 

@@ -15,4 +15,12 @@ class Ucenik extends Model
                 'naziv' => $this->naziv,
             ]);
     }
+
+    public function smer()
+	{
+		return $this->belongsTo(Smer::class, 'smer_id')
+            ->withDefault([
+                'naziv' => $this->naziv,
+            ]);
+    }
 }

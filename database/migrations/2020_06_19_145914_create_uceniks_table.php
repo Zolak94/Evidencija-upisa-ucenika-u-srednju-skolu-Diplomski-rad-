@@ -21,9 +21,11 @@ class CreateUceniksTable extends Migration
             $table->string('jmbg');
             $table->integer('pol');
             $table->unsignedBigInteger('odeljenje_id')->nullable();
+            $table->unsignedBigInteger('smer_id')->nullable();
             $table->timestamps();
 
             $table->foreign('odeljenje_id')->references('id')->on('odeljenja');
+            $table->foreign('smer_id')->references('id')->on('smerovi');
         });
     }
 
