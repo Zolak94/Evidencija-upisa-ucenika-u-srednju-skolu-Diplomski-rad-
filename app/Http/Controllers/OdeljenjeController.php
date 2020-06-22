@@ -89,7 +89,8 @@ class OdeljenjeController extends Controller
                 if ($nerasporedjeni_ucenici->isEmpty()) {
                     throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je 0.", 1);
                 } else if ($nerasporedjeni_ucenici->count() < $odeljenje->broj_ucenika) {
-                    throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je manji od ".$odeljenje->broj_ucenika.'.', 1);
+                    throw new \Exception("Operacija nije uspela. Broj učenika bez odeljenja je manji od ".
+                        $odeljenje->broj_ucenika.'.', 1);
                 }
                 foreach ($nerasporedjeni_ucenici as $key => $nerasporedjen_ucenik) {
                     $nerasporedjen_ucenik->odeljenje_id = $odeljenje->id;

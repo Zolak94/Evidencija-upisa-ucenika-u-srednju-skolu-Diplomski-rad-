@@ -18,9 +18,7 @@
     </style>
 @endpush
 @section('content')
-
 <div class="container">
-
     <div class="flex-center position-ref">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -45,7 +43,6 @@
                                 </div>
                             </div>
                             <br>
-
                             <table id="datatable" class="table teable-stripe table-hover" style="width: 100%">
                                 <thead>
                                     <tr>
@@ -132,20 +129,6 @@
                     }
                 ],
                 columnDefs: [
-                    // {
-                    //     targets: 6,
-                    //     "data": "napomena",
-                    //     "render": function(data, type, row, meta) {
-                    //         if (data != null) {
-                    //             return type === 'display' && data.length > 20 ?
-                    //                 '<p data-toggle="tooltip" title="' + data + '">' + data.substr(0,
-                    //                     20) + '...</p>' :
-                    //                 data;
-                    //         } else {
-                    //             return data;
-                    //         }
-                    //     }
-                    // },
                     {
                         targets: [1],
                         render:
@@ -190,9 +173,6 @@
                         name: 'akcija'
                     },
                 ],
-                "initComplete": function( settings, json ) {
-                    // hideLoader();
-                },
                 "order": [
                     [0, "desc"]
                 ],
