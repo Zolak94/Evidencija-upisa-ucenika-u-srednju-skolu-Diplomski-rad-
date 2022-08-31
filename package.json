@@ -28,7 +28,7 @@
         "@ttskch/select2-bootstrap4-theme": "^1.4.0",
         "flatpickr": "^4.6.3",
         "moment": "^2.27.0",
-        "moment-timezone": "^0.5.31",
+        "moment-timezone": "^0.5.35",
         "sweetalert2": "^9.15.1"
     }
 }
